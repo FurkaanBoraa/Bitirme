@@ -70,9 +70,9 @@ exports.getEventsRegistered = async (req, res, next) => {
 exports.registerToEvent = async (req, res, next) => {
     try {
         const userID = req.body.userID;
-        console.log(userID);
+
         const eventID = req.params.eventid;
-        console.log(eventID);
+
         const checkRegister = await UserEvent.findOne({
             where: {
                 userID: userID,
@@ -113,33 +113,36 @@ exports.joinToEvent = async (req, res, next) => {
         const userID = req.params.userid;
         const eventID = req.body.eventID;
         const checkRegister = await UserEvent.findOne({
-            where:{
+            where: {
                 userID: userID,
-                eventID: eventID
-            }
-        })
+                eventID: eventID,
+            },
+        });
         const checkEvent = await Event.findByPk(eventID);
-        if(checkEvent.dateTime.isBefore(today)){
+        if (checkEvent.dateTime.isBefore(today)) {
             if (!checkRegister) {
                 res.status(404).json({
                     status: 404,
-                    message : "Not Registered",
-                    data : "This user didn't registered the even"
-                })
+                    message: "Not Registered",
+                    data: "This user didn't registered the even",
+                });
             } else {
                 res.status(406).json({
                     status: 406,
                     message: "Not acceptable",
-                    data : "Event date has past"
-                })
+                    data: "Event date has past",
+                });
             }
         } else {
-            await UserEvent.update({isAttended : true}, {
-                where:{
-                    userID: userID,
-                    eventID: eventID
+            await UserEvent.update(
+                { isAttended: true },
+                {
+                    where: {
+                        userID: userID,
+                        eventID: eventID,
+                    },
                 }
-            })
+            );
         }
     } catch (error) {
         res.status(400).json({

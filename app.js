@@ -12,16 +12,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Routers
-app.use("/auth", authRoute);
-app.use("/event", eventRoute);
-app.use("/foundation", foundationRoute);
-app.use("/user", userRoute);
+app.use("/api/auth", authRoute);
+app.use("/api/event", eventRoute);
+app.use("/api/foundation", foundationRoute);
+app.use("/api/user", userRoute);
 
 const port = 5000;
 
 sequelize.sync({ force: false }).then(() => {
     app.listen(port, () => {
         console.log(`app started on ${port}`);
-        userDonation.sync();
     });
 });
